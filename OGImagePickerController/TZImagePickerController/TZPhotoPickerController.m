@@ -226,6 +226,24 @@ static CGSize AssetGridThumbnailSize;
     NSMutableArray *photos = [NSMutableArray array];
     NSMutableArray *assets = [NSMutableArray array];
     NSMutableArray *infoArr = [NSMutableArray array];
+    
+    if (_selectedPhotoArr.count == 0) {
+        if ([imagePickerVc.pickerDelegate respondsToSelector:@selector(imagePickerController:didFinishPickingPhotos:sourceAssets:)]) {
+            [imagePickerVc.pickerDelegate imagePickerController:imagePickerVc didFinishPickingPhotos:photos sourceAssets:assets];
+        }
+        if ([imagePickerVc.pickerDelegate respondsToSelector:@selector(imagePickerController:didFinishPickingPhotos:sourceAssets:infos:)]) {
+            [imagePickerVc.pickerDelegate imagePickerController:imagePickerVc didFinishPickingPhotos:photos sourceAssets:assets infos:infoArr];
+        }
+        if (imagePickerVc.didFinishPickingPhotosHandle) {
+            imagePickerVc.didFinishPickingPhotosHandle(photos,assets);
+        }
+        if (imagePickerVc.didFinishPickingPhotosWithInfosHandle) {
+            imagePickerVc.didFinishPickingPhotosWithInfosHandle(photos,assets,infoArr);
+        }
+        [imagePickerVc hideProgressHUD];
+        return;
+    }
+    
     for (NSInteger i = 0; i < _selectedPhotoArr.count; i++) { [photos addObject:@1];[assets addObject:@1];[infoArr addObject:@1]; }
     
     for (NSInteger i = 0; i < _selectedPhotoArr.count; i++) {
